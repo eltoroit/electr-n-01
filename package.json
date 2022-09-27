@@ -7,5 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Andres Perez <aperez@salesforce.com> (http://eltoro.it/)",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^21.0.0"
+  }
 }
