@@ -39,3 +39,4 @@ app.on("window-all-closed", () => {
 });
 
 console.log(`Hello from Electron 👋`);
+debugger;
