@@ -2,7 +2,7 @@
 ECMAScript modules (i.e. using import to load a module) are currently not directly supported in Electron.
 You can find more information about the state of ESM in Electron in https://github.com/electron/electron/issues/21457
 */
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 
 const createWindow = () => {
@@ -13,8 +13,8 @@ const createWindow = () => {
 			preload: path.join(__dirname, "preload.js"),
 		},
 	});
-
-	win.loadFile("index.html");
+	ipcMain.handle("ping", () => "pong");
+	win.loadFile("src/Web/index.html");
 };
 
 /*
