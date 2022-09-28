@@ -3,11 +3,15 @@ ECMAScript modules (i.e. using import to load a module) are currently not direct
 You can find more information about the state of ESM in Electron in https://github.com/electron/electron/issues/21457
 */
 const { app, BrowserWindow } = require("electron");
+const path = require("path");
 
 const createWindow = () => {
 	const win = new BrowserWindow({
 		width: 800,
 		height: 600,
+		webPreferences: {
+			preload: path.join(__dirname, "preload.js"),
+		},
 	});
 
 	win.loadFile("index.html");
