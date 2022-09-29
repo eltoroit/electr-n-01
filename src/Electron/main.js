@@ -15,6 +15,7 @@ const createWindow = () => {
 	});
 	ipcMain.handle("ping", () => "pong");
 	win.loadFile("src/Web/index.html");
+	win.webContents.openDevTools();
 };
 
 /*
