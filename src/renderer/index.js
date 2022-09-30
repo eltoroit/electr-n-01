@@ -7,9 +7,16 @@ msg += `Node.js (v${versions.node()}) and `;
 msg += `Electron (v${versions.electron})`;
 information.innerText = msg;
 
-const setButton = document.getElementById("btn");
+const btnSet = document.getElementById("btnSet");
 const titleInput = document.getElementById("title");
-setButton.addEventListener("click", () => {
+btnSet.addEventListener("click", () => {
 	const title = titleInput.value;
 	window.electronAPI.setTitle(title);
+});
+
+const btnOpenFile = document.getElementById("btnOpenFile");
+const filePathElement = document.getElementById("filePath");
+btnOpenFile.addEventListener("click", async () => {
+	const filePath = await window.electronAPI.openFile();
+	filePathElement.innerText = filePath;
 });
