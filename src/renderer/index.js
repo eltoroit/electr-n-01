@@ -16,7 +16,20 @@ btnSet.addEventListener("click", () => {
 
 const btnOpenFile = document.getElementById("btnOpenFile");
 const filePathElement = document.getElementById("filePath");
-btnOpenFile.addEventListener("click", async () => {
-	const filePath = await window.electronAPI.openFile();
-	filePathElement.innerText = filePath;
+btnOpenFile.addEventListener("click", () => {
+	window.electronAPI
+		.openFile()
+		.then((filePath) => {
+			filePathElement.innerText = filePath;
+		})
+		.catch((err) => {
+			alert("Error");
+		});
+});
+
+window.electronAPI.registerUpdateCounter((event, value) => {
+	const oldValue = Number(counter.innerText);
+	const newValue = oldValue + value;
+	counter.innerText = newValue;
+	event.sender.send("show-counter", newValue);
 });

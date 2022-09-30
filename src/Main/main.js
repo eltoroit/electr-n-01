@@ -2,7 +2,7 @@
 ECMAScript modules (i.e. using import to load a module) are currently not directly supported in Electron.
 You can find more information about the state of ESM in Electron in https://github.com/electron/electron/issues/21457
 */
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu, dialog } = require("electron");
 const path = require("path");
 
 const createWindow = () => {
@@ -13,6 +13,23 @@ const createWindow = () => {
 			preload: path.join(__dirname, "preload.js"),
 		},
 	});
+
+	const menu = Menu.buildFromTemplate([
+		{
+			label: app.name,
+			submenu: [
+				{
+					click: () => win.webContents.send("update-counter", 1),
+					label: "Increment",
+				},
+				{
+					click: () => win.webContents.send("update-counter", -1),
+					label: "Decrement",
+				},
+			],
+		},
+	]);
+	Menu.setApplicationMenu(menu);
 
 	win.loadFile("src/renderer/index.html");
 	win.webContents.openDevTools();
@@ -37,13 +54,22 @@ app.whenReady().then(() => {
 		const win = BrowserWindow.fromWebContents(webContents);
 		win.setTitle(title);
 	});
-	ipcMain.handle("dialog-open-file", async () => {
-		const { canceled, filePaths } = await dialog.showOpenDialog();
-		if (canceled) {
-			return;
-		} else {
-			return filePaths[0];
-		}
+	ipcMain.on("show-counter", (_event, value) => {
+		console.log(value); // will print value to NodeJS console
+	});
+	ipcMain.handle("open-file", () => {
+		return new Promise((resolve, reject) => {
+			dialog
+				.showOpenDialog()
+				.then(({ canceled, filePaths }) => {
+					if (canceled) {
+						resolve();
+					} else {
+						resolve(filePaths[0]);
+					}
+				})
+				.catch((err) => reject(err));
+		});
 	});
 
 	createWindow();
