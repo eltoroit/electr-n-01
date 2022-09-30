@@ -2,7 +2,7 @@
 ECMAScript modules (i.e. using import to load a module) are currently not directly supported in Electron.
 You can find more information about the state of ESM in Electron in https://github.com/electron/electron/issues/21457
 */
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
 
 const createWindow = () => {
@@ -26,11 +26,26 @@ However, Electron exposes app.whenReady() as a helper specifically for the ready
 pitfalls with directly listening to that event in particular. See https://github.com/electron/electron/pull/21972 for details.
 */
 app.whenReady().then(() => {
+	/*
+		ipcRenderer.send(channel, ...args) <=> ipcMain.on(channel, listener(event:IpcMainEvent , ...args:any[]))
+			- Send an asynchronous message to the main process via channel, along with arguments.
+		 ipcRenderer.invoke(channel, ...args) <=> ipcMain.handle(channel, listener(event:IpcMainInvokeEvent , ...args:any[]))
+		 	- Send a message to the main process via channel AND expect a result asynchronously.
+	*/
 	ipcMain.on("set-title", (event, title) => {
 		const webContents = event.sender;
 		const win = BrowserWindow.fromWebContents(webContents);
 		win.setTitle(title);
 	});
+	ipcMain.handle("dialog-open-file", async () => {
+		const { canceled, filePaths } = await dialog.showOpenDialog();
+		if (canceled) {
+			return;
+		} else {
+			return filePaths[0];
+		}
+	});
+
 	createWindow();
 	app.on("activate", () => {
 		if (BrowserWindow.getAllWindows().length === 0) createWindow();
