@@ -10,6 +10,3 @@ contextBridge.exposeInMainWorld("versions", {
 	electron: process.versions.electron,
 	// we can also expose variables, not just functions
 });
-contextBridge.exposeInMainWorld("electron", {
-	ping: () => ipcRenderer.invoke("ping"),
-});

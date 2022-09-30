@@ -13,13 +13,9 @@ const createWindow = () => {
 			preload: path.join(__dirname, "preload.js"),
 		},
 	});
-	ipcMain.handle("ping", () => "pong");
-	win.loadFile("src/renderer/index.html");
-	// win.loadURL("https://github.com");
 
-	const contents = win.webContents;
-	// console.log(contents);
-	contents.openDevTools();
+	win.loadFile("src/renderer/index.html");
+	win.webContents.openDevTools();
 };
 
 /*
