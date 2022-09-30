@@ -10,7 +10,8 @@ information.innerText = msg;
 const func = async () => {
 	const response = await window.versions.ping();
 	console.log(response); // prints out 'pong'
-    alert(response);
+	alert(response);
 };
 
+debugger;
 func();

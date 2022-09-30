@@ -15,7 +15,11 @@ const createWindow = () => {
 	});
 	ipcMain.handle("ping", () => "pong");
 	win.loadFile("src/Web/index.html");
-	win.webContents.openDevTools();
+	// win.loadURL("https://github.com");
+
+	const contents = win.webContents;
+	// console.log(contents);
+	contents.openDevTools();
 };
 
 /*
