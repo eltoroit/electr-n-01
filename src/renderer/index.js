@@ -7,13 +7,9 @@ msg += `Node.js (v${versions.node()}) and `;
 msg += `Electron (v${versions.electron})`;
 information.innerText = msg;
 
-const func = async () => {
-	const response = await window.electron.ping();
-	console.log(response); // prints out 'pong'
-	alert(response);
-};
-
-setTimeout(() => {
-	debugger;
-	func();
-}, 1e3);
+const setButton = document.getElementById("btn");
+const titleInput = document.getElementById("title");
+setButton.addEventListener("click", () => {
+	const title = titleInput.value;
+	window.electronAPI.setTitle(title);
+});
